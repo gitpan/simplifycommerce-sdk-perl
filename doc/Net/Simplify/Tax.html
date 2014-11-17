@@ -1,4 +1,4 @@
-<html><head><title>Net::Simplify::Refund</title>
+<html><head><title>Net::Simplify::Tax</title>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" >
 <link rel="stylesheet" title="blkbluw" type="text/css" href="../../_blkbluw.css" media="all" >
 <link rel="alternate stylesheet" title="blkmagw" type="text/css" href="../../_blkmagw.css" media="all" >
@@ -44,6 +44,7 @@
     <li class='indexItem indexItem2'><a href='#METHODS'>METHODS</a>
     <ul   class='indexList indexList3'>
       <li class='indexItem indexItem3'><a href='#create(%25params%2C_%24auth)'>create(%params, $auth)</a>
+      <li class='indexItem indexItem3'><a href='#delete()'>delete()</a>
       <li class='indexItem indexItem3'><a href='#list(%25criteria%2C_%24auth)'>list(%criteria, $auth)</a>
       <li class='indexItem indexItem3'><a href='#find(%24id%2C_%24auth)'>find($id, $auth)</a>
     </ul>
@@ -59,7 +60,7 @@
 name="NAME"
 >NAME</a></h1>
 
-<p>Net::Simplify::Refund - A Simplify Commerce Refund object</p>
+<p>Net::Simplify::Tax - A Simplify Commerce Tax object</p>
 
 <h1><a class='u' href='#___top' title='click to go to top of document'
 name="SYNOPSIS"
@@ -71,15 +72,19 @@ name="SYNOPSIS"
   $Net::Simplify::public_key = &#39;YOUR PUBLIC KEY&#39;;
   $Net::Simplify::private_key = &#39;YOUR PRIVATE KEY&#39;;
 
-  # Create a new Refund.
-  my $refund = Net::Simplify::Refund-&#62;create{ {...});
+  # Create a new Tax.
+  my $tax = Net::Simplify::Tax-&#62;create{ {...});
 
-  # Retrieve a Refund given its ID.
-  my $refund = Net::Simplify::Refund-&#62;find(&#39;a7e41&#39;);
+  # Retrieve a Tax given its ID.
+  my $tax = Net::Simplify::Tax-&#62;find(&#39;a7e41&#39;);
+
+  # Delete
+  my $tax = Net::Simplify::Tax-&#62;find(&#39;a7e41&#39;);
+  $tax-&#62;delete();
 
   # Retrieve a list of objects
-  my $refunds = Net::Simplify::Refund-&#62;list({max =&#62; 10});
-  foreach my $v ($refunds-&#62;list) {
+  my $taxs = Net::Simplify::Tax-&#62;list({max =&#62; 10});
+  foreach my $v ($taxs-&#62;list) {
       # ...
   }</pre>
 
@@ -95,7 +100,7 @@ name="METHODS"
 name="create(%params,_$auth)"
 >create(%params, $auth)</a></h3>
 
-<p>Creates a <code>Net::Simplify::Refund</code> object. The parameters are:</p>
+<p>Creates a <code>Net::Simplify::Tax</code> object. The parameters are:</p>
 
 <dl>
 <dt><a name="%params"
@@ -105,35 +110,17 @@ name="create(%params,_$auth)"
 <p>Hash map containing initial values for the object. Valid keys are:</p>
 
 <dl>
-<dt><a name="amount"
->amount</a></dt>
+<dt><a name="label"
+>label</a></dt>
 
 <dd>
-<p>Amount of the refund in the smallest unit of your currency. Example: 100 = $1.00USD [min value: 1, max value: 9999900] (<b>required</b>)</p>
+<p>The label of the tax object. [max length: 255] (<b>required</b>)</p>
 
-<dt><a name="payment"
->payment</a></dt>
-
-<dd>
-<p>ID of the payment for the refund (<b>required</b>)</p>
-
-<dt><a name="reason"
->reason</a></dt>
+<dt><a name="rate"
+>rate</a></dt>
 
 <dd>
-<p>Reason for the refund</p>
-
-<dt><a name="reference"
->reference</a></dt>
-
-<dd>
-<p>Custom reference field to be used with outside systems.</p>
-
-<dt><a name="replayId"
->replayId</a></dt>
-
-<dd>
-<p>An identifier that can be sent to uniquely identify a refund request to facilitate retries due to I/O related issues. This identifier must be unique for your account (sandbox or live) across all of your refunds. If supplied, we will check for a refund on your account that matches this identifier. If found we will return an identical response to that of the original request. [max length: 50, min length: 1]</p>
+<p>The tax rate. Decimal value up three decimal places. e.g 12.501. [max length: 6] (<b>required</b>)</p>
 </dd>
 </dl>
 
@@ -146,10 +133,16 @@ name="create(%params,_$auth)"
 </dl>
 
 <h3><a class='u' href='#___top' title='click to go to top of document'
+name="delete()"
+>delete()</a></h3>
+
+<p>Deletes the <code>Net::Simplify::Tax</code> object. Authentication is done using the same credentials used when the AccessToken was created.</p>
+
+<h3><a class='u' href='#___top' title='click to go to top of document'
 name="list(%criteria,_$auth)"
 >list(%criteria, $auth)</a></h3>
 
-<p>Retrieve a list of <code>Net::Simplify::Refund</code> objects. The parameters are:</p>
+<p>Retrieve a list of <code>Net::Simplify::Tax</code> objects. The parameters are:</p>
 
 <dl>
 <dt><a name="%criteria"
@@ -188,20 +181,8 @@ name="list(%criteria,_$auth)"
 ><code>id</code></a></dt>
 
 <dd>
-<dt><a name="amount"
-><code>amount</code></a></dt>
-
-<dd>
-<dt><a name="description"
-><code>description</code></a></dt>
-
-<dd>
-<dt><a name="dateCreated"
-><code>dateCreated</code></a></dt>
-
-<dd>
-<dt><a name="paymentDate"
-><code>paymentDate</code></a></dt>
+<dt><a name="label"
+><code>label</code></a></dt>
 </dl>
 </dd>
 </dl>
@@ -212,7 +193,7 @@ name="list(%criteria,_$auth)"
 name="find($id,_$auth)"
 >find($id, $auth)</a></h3>
 
-<p>Retrieve a <code>Net::Simplify::Refund</code> object from the API. Parameters are:</p>
+<p>Retrieve a <code>Net::Simplify::Tax</code> object from the API. Parameters are:</p>
 
 <dl>
 <dt><a name="$id"

@@ -1,4 +1,4 @@
-<html><head><title>Net::Simplify::Refund</title>
+<html><head><title>Net::Simplify::Authorization</title>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" >
 <link rel="stylesheet" title="blkbluw" type="text/css" href="../../_blkbluw.css" media="all" >
 <link rel="alternate stylesheet" title="blkmagw" type="text/css" href="../../_blkmagw.css" media="all" >
@@ -44,6 +44,7 @@
     <li class='indexItem indexItem2'><a href='#METHODS'>METHODS</a>
     <ul   class='indexList indexList3'>
       <li class='indexItem indexItem3'><a href='#create(%25params%2C_%24auth)'>create(%params, $auth)</a>
+      <li class='indexItem indexItem3'><a href='#delete()'>delete()</a>
       <li class='indexItem indexItem3'><a href='#list(%25criteria%2C_%24auth)'>list(%criteria, $auth)</a>
       <li class='indexItem indexItem3'><a href='#find(%24id%2C_%24auth)'>find($id, $auth)</a>
     </ul>
@@ -59,7 +60,7 @@
 name="NAME"
 >NAME</a></h1>
 
-<p>Net::Simplify::Refund - A Simplify Commerce Refund object</p>
+<p>Net::Simplify::Authorization - A Simplify Commerce Authorization object</p>
 
 <h1><a class='u' href='#___top' title='click to go to top of document'
 name="SYNOPSIS"
@@ -71,15 +72,19 @@ name="SYNOPSIS"
   $Net::Simplify::public_key = &#39;YOUR PUBLIC KEY&#39;;
   $Net::Simplify::private_key = &#39;YOUR PRIVATE KEY&#39;;
 
-  # Create a new Refund.
-  my $refund = Net::Simplify::Refund-&#62;create{ {...});
+  # Create a new Authorization.
+  my $authorization = Net::Simplify::Authorization-&#62;create{ {...});
 
-  # Retrieve a Refund given its ID.
-  my $refund = Net::Simplify::Refund-&#62;find(&#39;a7e41&#39;);
+  # Retrieve a Authorization given its ID.
+  my $authorization = Net::Simplify::Authorization-&#62;find(&#39;a7e41&#39;);
+
+  # Delete
+  my $authorization = Net::Simplify::Authorization-&#62;find(&#39;a7e41&#39;);
+  $authorization-&#62;delete();
 
   # Retrieve a list of objects
-  my $refunds = Net::Simplify::Refund-&#62;list({max =&#62; 10});
-  foreach my $v ($refunds-&#62;list) {
+  my $authorizations = Net::Simplify::Authorization-&#62;list({max =&#62; 10});
+  foreach my $v ($authorizations-&#62;list) {
       # ...
   }</pre>
 
@@ -95,7 +100,7 @@ name="METHODS"
 name="create(%params,_$auth)"
 >create(%params, $auth)</a></h3>
 
-<p>Creates a <code>Net::Simplify::Refund</code> object. The parameters are:</p>
+<p>Creates a <code>Net::Simplify::Authorization</code> object. The parameters are:</p>
 
 <dl>
 <dt><a name="%params"
@@ -109,19 +114,91 @@ name="create(%params,_$auth)"
 >amount</a></dt>
 
 <dd>
-<p>Amount of the refund in the smallest unit of your currency. Example: 100 = $1.00USD [min value: 1, max value: 9999900] (<b>required</b>)</p>
+<p>Amount of the payment (in the smallest unit of your currency). Example: 100 = $1.00USD [min value: 50, max value: 9999900] (<b>required</b>)</p>
 
-<dt><a name="payment"
->payment</a></dt>
-
-<dd>
-<p>ID of the payment for the refund (<b>required</b>)</p>
-
-<dt><a name="reason"
->reason</a></dt>
+<dt><a name="card.addressCity"
+>card.addressCity</a></dt>
 
 <dd>
-<p>Reason for the refund</p>
+<p>City of the cardholder. [max length: 50, min length: 2]</p>
+
+<dt><a name="card.addressCountry"
+>card.addressCountry</a></dt>
+
+<dd>
+<p>Country code (ISO-3166-1-alpha-2 code) of residence of the cardholder. [max length: 2, min length: 2]</p>
+
+<dt><a name="card.addressLine1"
+>card.addressLine1</a></dt>
+
+<dd>
+<p>Address of the cardholder. [max length: 255]</p>
+
+<dt><a name="card.addressLine2"
+>card.addressLine2</a></dt>
+
+<dd>
+<p>Address of the cardholder if needed. [max length: 255]</p>
+
+<dt><a name="card.addressState"
+>card.addressState</a></dt>
+
+<dd>
+<p>State code (USPS code) of residence of the cardholder. [max length: 2, min length: 2]</p>
+
+<dt><a name="card.addressZip"
+>card.addressZip</a></dt>
+
+<dd>
+<p>Postal code of the cardholder. The postal code size is between 5 and 9 characters in length and only contains numbers or letters. [max length: 9, min length: 3]</p>
+
+<dt><a name="card.cvc"
+>card.cvc</a></dt>
+
+<dd>
+<p>CVC security code of the card. This is the code on the back of the card. Example: 123</p>
+
+<dt><a name="card.expMonth"
+>card.expMonth</a></dt>
+
+<dd>
+<p>Expiration month of the card. Format is MM. Example: January = 01 [min value: 1, max value: 12] (<b>required</b>)</p>
+
+<dt><a name="card.expYear"
+>card.expYear</a></dt>
+
+<dd>
+<p>Expiration year of the card. Format is YY. Example: 2013 = 13 [max value: 99] (<b>required</b>)</p>
+
+<dt><a name="card.name"
+>card.name</a></dt>
+
+<dd>
+<p>Name as it appears on the card. [max length: 50, min length: 2]</p>
+
+<dt><a name="card.number"
+>card.number</a></dt>
+
+<dd>
+<p>Card number as it appears on the card. [max length: 19, min length: 13] (<b>required</b>)</p>
+
+<dt><a name="currency"
+>currency</a></dt>
+
+<dd>
+<p>Currency code (ISO-4217) for the transaction. Must match the currency associated with your account. [default: USD] (<b>required</b>)</p>
+
+<dt><a name="customer"
+>customer</a></dt>
+
+<dd>
+<p>ID of customer. If specified, card on file of customer will be used.</p>
+
+<dt><a name="description"
+>description</a></dt>
+
+<dd>
+<p>Free form text field to be used as a description of the payment. This field is echoed back with the payment on any find or list operations. [max length: 1024]</p>
 
 <dt><a name="reference"
 >reference</a></dt>
@@ -133,7 +210,13 @@ name="create(%params,_$auth)"
 >replayId</a></dt>
 
 <dd>
-<p>An identifier that can be sent to uniquely identify a refund request to facilitate retries due to I/O related issues. This identifier must be unique for your account (sandbox or live) across all of your refunds. If supplied, we will check for a refund on your account that matches this identifier. If found we will return an identical response to that of the original request. [max length: 50, min length: 1]</p>
+<p>An identifier that can be sent to uniquely identify a payment request to facilitate retries due to I/O related issues. This identifier must be unique for your account (sandbox or live) across all of your payments. If supplied, we will check for a payment on your account that matches this identifier, and if one is found we will attempt to return an identical response of the original request. [max length: 50, min length: 1]</p>
+
+<dt><a name="token"
+>token</a></dt>
+
+<dd>
+<p>If specified, card associated with card token will be used. [max length: 255]</p>
 </dd>
 </dl>
 
@@ -146,10 +229,16 @@ name="create(%params,_$auth)"
 </dl>
 
 <h3><a class='u' href='#___top' title='click to go to top of document'
+name="delete()"
+>delete()</a></h3>
+
+<p>Deletes the <code>Net::Simplify::Authorization</code> object. Authentication is done using the same credentials used when the AccessToken was created.</p>
+
+<h3><a class='u' href='#___top' title='click to go to top of document'
 name="list(%criteria,_$auth)"
 >list(%criteria, $auth)</a></h3>
 
-<p>Retrieve a list of <code>Net::Simplify::Refund</code> objects. The parameters are:</p>
+<p>Retrieve a list of <code>Net::Simplify::Authorization</code> objects. The parameters are:</p>
 
 <dl>
 <dt><a name="%criteria"
@@ -175,7 +264,7 @@ name="list(%criteria,_$auth)"
 ><code>offset</code></a></dt>
 
 <dd>
-<p>Used in paging of the list. This is the start offset of the page. [default: 0]</p>
+<p>Used in pagination of the list. This is the start offset of the page. [default: 0]</p>
 
 <dt><a name="sorting"
 ><code>sorting</code></a></dt>
@@ -184,20 +273,20 @@ name="list(%criteria,_$auth)"
 <p>Allows for ascending or descending sorting of the list. The value maps properties to the sort direction (either <code>asc</code> for ascending or <code>desc</code> for descending). Sortable properties are:</p>
 
 <dl>
-<dt><a name="id"
-><code>id</code></a></dt>
+<dt><a name="dateCreated"
+><code>dateCreated</code></a></dt>
 
 <dd>
 <dt><a name="amount"
 ><code>amount</code></a></dt>
 
 <dd>
-<dt><a name="description"
-><code>description</code></a></dt>
+<dt><a name="id"
+><code>id</code></a></dt>
 
 <dd>
-<dt><a name="dateCreated"
-><code>dateCreated</code></a></dt>
+<dt><a name="description"
+><code>description</code></a></dt>
 
 <dd>
 <dt><a name="paymentDate"
@@ -212,7 +301,7 @@ name="list(%criteria,_$auth)"
 name="find($id,_$auth)"
 >find($id, $auth)</a></h3>
 
-<p>Retrieve a <code>Net::Simplify::Refund</code> object from the API. Parameters are:</p>
+<p>Retrieve a <code>Net::Simplify::Authorization</code> object from the API. Parameters are:</p>
 
 <dl>
 <dt><a name="$id"

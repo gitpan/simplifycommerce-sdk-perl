@@ -79,6 +79,7 @@ L<Net::Simplify::AccessToken>,
 L<Net::Simplify::ApiException>,
 L<Net::Simplify::Authentication>,
 L<Net::Simplify::AuthenticationException>,
+L<Net::Simplify::Authorization>,
 L<Net::Simplify::BadRequestException>,
 L<Net::Simplify::CardToken>,
 L<Net::Simplify::Chargeback>,
@@ -92,6 +93,7 @@ L<Net::Simplify::FieldError>,
 L<Net::Simplify::IllegalArgumentException>,
 L<Net::Simplify::Invoice>,
 L<Net::Simplify::InvoiceItem>,
+L<Net::Simplify::Tax>,
 L<Net::Simplify::NotAllowedException>,
 L<Net::Simplify::ObjectNotFoundException>,
 L<Net::Simplify::Payment>,
@@ -104,7 +106,7 @@ L<http://www.simplify.com>
 
 =head1 VERSION
 
-1.0.5
+1.1.0
 
 =head1 LICENSE
 
@@ -161,6 +163,7 @@ use Net::Simplify::FieldError;
 use Net::Simplify::SimplifyApi;
 use Net::Simplify::Event;
 
+use Net::Simplify::Authorization;
 use Net::Simplify::CardToken;
 use Net::Simplify::Chargeback;
 use Net::Simplify::Constants;
@@ -169,6 +172,7 @@ use Net::Simplify::Customer;
 use Net::Simplify::Deposit;
 use Net::Simplify::Invoice;
 use Net::Simplify::InvoiceItem;
+use Net::Simplify::Tax;
 use Net::Simplify::Payment;
 use Net::Simplify::Plan;
 use Net::Simplify::Refund;

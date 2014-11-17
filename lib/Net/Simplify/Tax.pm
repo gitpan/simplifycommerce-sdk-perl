@@ -1,8 +1,8 @@
-package Net::Simplify::Webhook;
+package Net::Simplify::Tax;
 
 =head1 NAME
 
-Net::Simplify::Webhook - A Simplify Commerce Webhook object
+Net::Simplify::Tax - A Simplify Commerce Tax object
 
 =head1 SYNOPSIS
 
@@ -12,24 +12,19 @@ Net::Simplify::Webhook - A Simplify Commerce Webhook object
   $Net::Simplify::public_key = 'YOUR PUBLIC KEY';
   $Net::Simplify::private_key = 'YOUR PRIVATE KEY';
 
-  # Create a new Webhook.
-  my $webhook = Net::Simplify::Webhook->create{ {...});
+  # Create a new Tax.
+  my $tax = Net::Simplify::Tax->create{ {...});
 
-  # Retrieve a Webhook given its ID.
-  my $webhook = Net::Simplify::Webhook->find('a7e41');
-
-  # Update existing Webhook.
-  my $webhook = Net::Simplify::Webhook->find('a7e41');
-  $webhook->{PROPERTY} = "NEW VALUE";
-  $webhook->update();
+  # Retrieve a Tax given its ID.
+  my $tax = Net::Simplify::Tax->find('a7e41');
 
   # Delete
-  my $webhook = Net::Simplify::Webhook->find('a7e41');
-  $webhook->delete();
+  my $tax = Net::Simplify::Tax->find('a7e41');
+  $tax->delete();
 
   # Retrieve a list of objects
-  my $webhooks = Net::Simplify::Webhook->list({max => 10});
-  foreach my $v ($webhooks->list) {
+  my $taxs = Net::Simplify::Tax->list({max => 10});
+  foreach my $v ($taxs->list) {
       # ...
   }
 
@@ -39,7 +34,7 @@ Net::Simplify::Webhook - A Simplify Commerce Webhook object
 
 =head3 create(%params, $auth)
 
-Creates a C<Net::Simplify::Webhook> object.  The parameters are:
+Creates a C<Net::Simplify::Tax> object.  The parameters are:
 
 =over 4
 
@@ -49,9 +44,13 @@ Hash map containing initial values for the object.  Valid keys are:
 
 =over 4
 
-=item url
+=item label
 
-Endpoint URL (B<required>) 
+The label of the tax object. [max length: 255] (B<required>) 
+
+=item rate
+
+The tax rate.  Decimal value up three decimal places.  e.g 12.501. [max length: 6] (B<required>) 
 
 
 =back
@@ -68,13 +67,13 @@ C<$Net::Simplify::public_key> and C<$Net::Simplify::private_key> are used.
 
 =head3 delete()
 
-Deletes the C<Net::Simplify::Webhook> object.  Authentication is done using the same credentials used when the AccessToken was created.
+Deletes the C<Net::Simplify::Tax> object.  Authentication is done using the same credentials used when the AccessToken was created.
 
 
 
 =head3 list(%criteria, $auth)
 
-Retrieve a list of C<Net::Simplify::Webhook> objects.  The parameters are:
+Retrieve a list of C<Net::Simplify::Tax> objects.  The parameters are:
 
 =over 4
 
@@ -109,7 +108,9 @@ The value maps properties to the sort direction (either C<asc> for ascending or 
 
 =over 4
 
-=item C<dateCreated>
+=item C<id>
+
+=item C<label>
 
 
 =back
@@ -125,7 +126,7 @@ The value maps properties to the sort direction (either C<asc> for ascending or 
 
 =head3 find($id, $auth)
 
-Retrieve a C<Net::Simplify::Webhook> object from the API.  Parameters are:
+Retrieve a C<Net::Simplify::Tax> object from the API.  Parameters are:
 
 =over 4
 
@@ -140,25 +141,6 @@ C<$Net::Simplify::public_key> and C<$Net::Simplify::private_key> are used.
 
 =back
 
-
-
-
-=head3 update()
-
-Update C<Net::Simplify::Webhook> object.
-The properties that can be updated are:
-
-=over 4
-
-
-
-=item C<url>
-
-Endpoint URL (B<required>) 
-
-Authentication is done using the same credentials used when the AccessToken was created.
-
-=back
 
 
 
@@ -221,7 +203,7 @@ sub create {
     my ($class, $params, $auth) = @_;
     
     $auth = Net::Simplify::SimplifyApi->get_authentication($auth);
-    my $result = Net::Simplify::SimplifyApi->send_api_request("webhook", 'create', $params, $auth);
+    my $result = Net::Simplify::SimplifyApi->send_api_request("tax", 'create', $params, $auth);
 
     $class->SUPER::new($result, $auth);
 }
@@ -233,14 +215,14 @@ sub delete {
     my $auth = Net::Simplify::SimplifyApi->get_authentication($self->{_authentication});
 
     my $id = $self->{id};
-    $self->merge(Net::Simplify::SimplifyApi->send_api_request("webhook", 'delete', {id => $id}, $auth));
+    $self->merge(Net::Simplify::SimplifyApi->send_api_request("tax", 'delete', {id => $id}, $auth));
 }
 
 sub list {
     my ($class, $criteria, $auth) = @_;
    
     $auth = Net::Simplify::SimplifyApi->get_authentication($auth);
-    my $result = Net::Simplify::SimplifyApi->send_api_request("webhook", 'list', $criteria, $auth);
+    my $result = Net::Simplify::SimplifyApi->send_api_request("tax", 'list', $criteria, $auth);
 
     Net::Simplify::DomainList->new($result, $class, $auth);
 }
@@ -249,20 +231,9 @@ sub find {
     my ($class, $id, $auth) = @_;
 
     $auth = Net::Simplify::SimplifyApi->get_authentication($auth);
-    my $result = Net::Simplify::SimplifyApi->send_api_request("webhook", 'find', { id => $id }, $auth);
+    my $result = Net::Simplify::SimplifyApi->send_api_request("tax", 'find', { id => $id }, $auth);
 
     $class->SUPER::new($result, $auth);
-}
-
-sub update {
-
-    my ($self) = @_;
-
-    my $auth = Net::Simplify::SimplifyApi->get_authentication($self->{_authentication});
-    my $params = { %$self };
-    delete $params->{_authentication};
-
-    $self->merge(Net::Simplify::SimplifyApi->send_api_request("webhook", 'update', $params, $auth));
 }
 
 
